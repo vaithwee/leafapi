@@ -1,10 +1,19 @@
+# 核心依赖 - 生产环境必需
 fastapi
-uvicorn
 pydantic
+asgiref
+starlette
+
+# 部署相关
 python-multipart
+
+# 本地开发服务器（生产环境可选）
+uvicorn
+
+# 其他服务器选项
 gunicorn
+
+# 开发和测试工具
 python-dotenv
 pytest
 httpx
-asgiref
-starlette

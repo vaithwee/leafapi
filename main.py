@@ -3,8 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from typing import List, Optional
-import uvicorn
 from datetime import datetime
+
+# 可选导入uvicorn（仅用于本地开发）
+try:
+    import uvicorn
+except ImportError:
+    uvicorn = None
 
 # 创建FastAPI应用实例
 app = FastAPI(
@@ -114,4 +119,8 @@ async def delete_item(item_id: int):
 
 # 本地开发运行
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True) 
+    if uvicorn:
+        uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    else:
+        print("警告: uvicorn未安装，无法启动本地开发服务器")
+        print("请运行: pip install uvicorn") 

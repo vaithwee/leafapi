@@ -1,0 +1,16 @@
+# PythonAnywhere生产环境最小化依赖
+# 仅包含WSGI部署必需的包
+
+# 核心FastAPI依赖
+fastapi
+pydantic
+starlette
+
+# ASGI到WSGI适配器
+asgiref
+
+# 文件上传支持
+python-multipart
+
+# 可选：环境变量管理
+python-dotenv
