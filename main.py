@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -11,23 +12,42 @@ try:
 except ImportError:
     uvicorn = None
 
+# 检测运行环境
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+IS_PRODUCTION = ENVIRONMENT == "production"
+
 # 创建FastAPI应用实例
 app = FastAPI(
     title="LeafAPI",
-    description="一个基于FastAPI的后端API项目",
+    description="一个基于FastAPI的后端API项目 - 运行在 PythonAnywhere",
     version="1.0.0",
-    docs_url="/docs",
-    redoc_url="/redoc"
+    docs_url="/docs" if not IS_PRODUCTION else "/docs",
+    redoc_url="/redoc" if not IS_PRODUCTION else "/redoc",
+    debug=not IS_PRODUCTION
 )
 
 # 添加CORS中间件
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # 生产环境中应该指定具体的域名
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if IS_PRODUCTION:
+    # 生产环境 - 限制 CORS 域名
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "https://yourdomain.com",  # 替换为您的域名
+            "https://www.yourdomain.com",
+        ],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["*"],
+    )
+else:
+    # 开发环境 - 允许所有域名
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # 数据模型
 class Item(BaseModel):
@@ -52,8 +72,11 @@ async def root():
     return {
         "message": "欢迎使用LeafAPI",
         "version": "1.0.0",
+        "environment": ENVIRONMENT,
+        "platform": "PythonAnywhere",
         "timestamp": datetime.now().isoformat(),
-        "docs": "/docs"
+        "docs": "/docs",
+        "redoc": "/redoc"
     }
 
 # 健康检查
@@ -61,7 +84,10 @@ async def root():
 async def health_check():
     return {
         "status": "healthy",
-        "timestamp": datetime.now().isoformat()
+        "environment": ENVIRONMENT,
+        "platform": "PythonAnywhere",
+        "timestamp": datetime.now().isoformat(),
+        "uptime": "运行正常"
     }
 
 # 获取所有项目

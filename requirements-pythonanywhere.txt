@@ -1,0 +1,27 @@
+# PythonAnywhere 部署专用依赖文件
+# 核心 FastAPI 依赖
+fastapi==0.104.1
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# ASGI 服务器
+uvicorn[standard]==0.24.0
+
+# 其他核心依赖
+starlette==0.27.0
+python-multipart==0.0.6
+email-validator==2.1.0
+
+# 开发和调试工具 (可选)
+python-dotenv==1.0.0
+
+# 安全相关
+cryptography==41.0.8
+passlib[bcrypt]==1.7.4
+
+# 数据库支持 (如果需要)
+# sqlalchemy==2.0.23
+# databases==0.8.0
+
+# 监控和日志
+# structlog==23.2.0 
