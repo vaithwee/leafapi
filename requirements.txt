@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pydantic
+python-multipart
+gunicorn
+python-dotenv
+pytest
+httpx
